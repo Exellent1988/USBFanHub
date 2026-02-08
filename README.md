@@ -6,101 +6,101 @@
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Release](https://img.shields.io/github/v/release/Exellent1988/USBFanHub)](https://github.com/Exellent1988/USBFanHub/releases)
 
-Ein USB-basierter Lüfter-Hub mit Raspberry Pi Pico, der 6x 4-Pin PWM-Lüfter steuert und unter Linux hwmon-kompatibel ist.
+A USB-based fan hub using Raspberry Pi Pico that controls 6x 4-pin PWM fans and is hwmon-compatible under Linux.
 
 ## Features
 
-- **6x 4-Pin PWM Lüfter-Anschlüsse**
-  - PWM-Steuerung (25 kHz Standard)
-  - Tachometer-Signal-Auswertung (RPM-Messung)
-  - Individuelle Steuerung jedes Lüfters
+- **6x 4-Pin PWM Fan Connectors**
+  - PWM control (25 kHz standard)
+  - Tachometer signal evaluation (RPM measurement)
+  - Individual control of each fan
   
-- **RGB LED-Steuerung**
-  - Addressierbare RGB LEDs (WS2812B/NeoPixel)
-  - Linux-kompatible Standards
-  - Programmierbare Effekte
+- **RGB LED Control**
+  - Addressable RGB LEDs (WS2812B/NeoPixel)
+  - Linux-compatible standards
+  - Programmable effects
 
 - **Linux hwmon Integration**
-  - Standard hwmon Schnittstelle für Systemmonitoring
-  - Kompatibel mit lm-sensors und anderen Tools
-  - Userspace-Treiber für einfache Integration
+  - Standard hwmon interface for system monitoring
+  - Compatible with lm-sensors and other tools
+  - Userspace driver for easy integration
 
 - **USB HID Interface**
-  - Plug & Play unter Linux
-  - Keine Kernel-Module erforderlich
-  - Standardisiertes Kommunikationsprotokoll
+  - Plug & Play under Linux
+  - No kernel modules required
+  - Standardized communication protocol
 
-## Projekt-Struktur
+## Project Structure
 
 ```
 ├── firmware/           # Raspberry Pi Pico Firmware (C/C++)
-│   ├── src/           # Quellcode
-│   ├── include/       # Header-Dateien
-│   └── CMakeLists.txt # Build-Konfiguration
-├── software/          # Linux-Software
-│   ├── driver/        # hwmon-kompatibler Treiber
-│   └── tools/         # Konfigurations-Tools
-├── hardware/          # Hardware-Design-Dokumentation
-│   ├── pinout.md      # Pin-Zuweisungen
-│   └── schematics/    # Schaltplan-Vorschläge für KiCad
-└── docs/              # Zusätzliche Dokumentation
+│   ├── src/           # Source code
+│   ├── include/       # Header files
+│   └── CMakeLists.txt # Build configuration
+├── software/          # Linux software
+│   ├── driver/        # hwmon-compatible driver
+│   └── tools/         # Configuration tools
+├── hardware/          # Hardware design documentation
+│   ├── pinout.md      # Pin assignments
+│   └── schematics/    # Schematic suggestions for KiCad
+└── docs/              # Additional documentation
 ```
 
-## Hardware-Anforderungen
+## Hardware Requirements
 
 ### Raspberry Pi Pico
-- RP2040 Mikrocontroller
+- RP2040 microcontroller
 - USB 2.0 Full Speed
-- Ausreichend GPIO-Pins für 6 Lüfter + RGB
+- Sufficient GPIO pins for 6 fans + RGB
 
-### 4-Pin PWM Lüfter
+### 4-Pin PWM Fans
 - Pin 1: Ground (GND)
 - Pin 2: +12V (Power)
-- Pin 3: Tachometer (Tacho) - Open-Collector-Ausgang
-- Pin 4: PWM - PWM-Steuerung (25 kHz Standard)
+- Pin 3: Tachometer (Tacho) - Open-collector output
+- Pin 4: PWM - PWM control (25 kHz standard)
 
-### Zusätzliche Komponenten
-- Level-Shifter (3.3V → 5V) für PWM-Signale
-- Pull-Up-Widerstände für Tachometer-Eingänge
-- Optokoppler oder Schmitt-Trigger für Tachometer-Filterung
-- 12V Stromversorgung für Lüfter
-- MOSFET oder Logic-Level-Shifter für RGB LEDs
+### Additional Components
+- Level shifter (3.3V → 5V) for PWM signals
+- Pull-up resistors for tachometer inputs
+- Optocoupler or Schmitt trigger for tachometer filtering
+- 12V power supply for fans
+- MOSFET or logic-level shifter for RGB LEDs
 
 ## CI/CD & Releases
 
-### Automatisches Bauen
+### Automatic Building
 
-Dieses Projekt nutzt GitHub Actions für automatisches Bauen und Testen:
+This project uses GitHub Actions for automatic building and testing:
 
-- **Firmware Build**: Jeder Push zur `main`, `develop` oder `cursor/**` Branch baut die Firmware automatisch
-- **Python Tests**: Automatische Tests für Python 3.8, 3.9, 3.10, 3.11
-- **Releases**: Automatisches Erstellen von Releases bei Git-Tags (`v*.*.*`)
+- **Firmware Build**: Every push to `main`, `develop`, or `cursor/**` branch automatically builds the firmware
+- **Python Tests**: Automatic tests for Python 3.8, 3.9, 3.10, 3.11
+- **Releases**: Automatic release creation on Git tags (`v*.*.*`)
 
-### Artifacts herunterladen
+### Download Artifacts
 
-Nach jedem erfolgreichen Build:
-1. Gehe zu [Actions](https://github.com/Exellent1988/USBFanHub/actions)
-2. Wähle einen erfolgreichen Workflow-Run
-3. Lade Artifacts herunter:
-   - `pico-fan-hub-firmware-vX.X.X` - Firmware Binaries
-   - `python-packages` - Python Wheel & Source Distribution
+After every successful build:
+1. Go to [Actions](https://github.com/Exellent1988/USBFanHub/actions)
+2. Select a successful workflow run
+3. Download artifacts:
+   - `pico-fan-hub-firmware-vX.X.X` - Firmware binaries
+   - `python-packages` - Python wheel & source distribution
 
-### Release erstellen
+### Create Release
 
-Automatisch bei Tag:
+Automatically with tag:
 ```bash
 git tag v1.0.0
 git push origin v1.0.0
 ```
 
-Manuell über GitHub Actions:
-1. Gehe zu Actions → Release
-2. "Run workflow" → Version eingeben
-3. Release wird automatisch erstellt
+Manually via GitHub Actions:
+1. Go to Actions → Release
+2. "Run workflow" → Enter version
+3. Release will be created automatically
 
 ## Quick Start
 
-### Firmware bauen
+### Build Firmware
 
 ```bash
 cd firmware
@@ -110,47 +110,47 @@ cmake ..
 make
 ```
 
-### Firmware flashen
+### Flash Firmware
 
 ```bash
-# Pico in BOOTSEL-Modus versetzen (BOOTSEL-Taste beim Anschließen gedrückt halten)
-# Dann .uf2-Datei auf RPI-RP2 Volume kopieren
+# Put Pico in BOOTSEL mode (hold BOOTSEL button while connecting USB)
+# Then copy .uf2 file to RPI-RP2 volume
 cp pico_fan_hub.uf2 /media/$USER/RPI-RP2/
 ```
 
-### Linux-Software installieren
+### Install Linux Software
 
 ```bash
 cd software/driver
 pip install -e .
 ```
 
-## Verwendung unter Linux
+## Usage under Linux
 
-Nach dem Anschließen des Fan Hubs wird er automatisch als hwmon-Device erkannt:
+After connecting the fan hub, it will automatically be recognized as an hwmon device:
 
 ```bash
-# Lüfter-Geschwindigkeiten anzeigen
+# Show fan speeds
 sensors
 
-# Manuell mit sysfs interagieren
+# Manually interact with sysfs
 cd /sys/class/hwmon/hwmonX/
-cat fan1_input  # RPM von Lüfter 1
-echo 128 > pwm1 # PWM auf 50% setzen (0-255)
+cat fan1_input  # RPM of fan 1
+echo 128 > pwm1 # Set PWM to 50% (0-255)
 ```
 
-## USB HID Protokoll
+## USB HID Protocol
 
-Details zum USB HID Protokoll siehe [docs/usb_protocol.md](docs/usb_protocol.md)
+For details on the USB HID protocol, see [docs/usb_protocol.md](docs/usb_protocol.md)
 
-## RGB Steuerung
+## RGB Control
 
-Details zur RGB-Steuerung siehe [docs/rgb_control.md](docs/rgb_control.md)
+For details on RGB control, see [docs/rgb_control.md](docs/rgb_control.md)
 
-## Lizenz
+## License
 
-Siehe [LICENSE](LICENSE)
+See [LICENSE](LICENSE)
 
-## Entwicklungsstatus
+## Development Status
 
-🚧 Projekt in aktiver Entwicklung
+🚧 Project in active development
