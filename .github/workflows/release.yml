@@ -50,14 +50,15 @@ jobs:
           git submodule update --init
         fi
     
+    - name: Set Pico SDK Path
+      run: echo "PICO_SDK_PATH=$HOME/pico-sdk" >> $GITHUB_ENV
+    
     - name: Build Firmware
-      env:
-        PICO_SDK_PATH: ${{ github.workspace }}/../pico-sdk
       run: |
         cd firmware
         mkdir -p build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DPICO_SDK_PATH=$HOME/pico-sdk
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DPICO_SDK_PATH=$PICO_SDK_PATH
         make -j$(nproc)
     
     - name: Extract Version
