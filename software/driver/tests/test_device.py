@@ -160,10 +160,10 @@ class TestPicoFanHub:
         result = fan_hub.set_rgb_direct(0, colors)
         
         assert result is True
-        mock_hid_device.write.assert_called_once()
+        mock_hid_device.send_feature_report.assert_called_once()
         
         # Verify the sent data
-        call_args = mock_hid_device.write.call_args[0][0]
+        call_args = mock_hid_device.send_feature_report.call_args[0][0]
         assert call_args[0] == REPORT_ID_RGB_CONTROL
         assert call_args[1] == 0  # start_index
         assert call_args[2] == 3  # count
@@ -174,9 +174,9 @@ class TestPicoFanHub:
         result = fan_hub.set_rgb_mode_rainbow(speed=75)
         
         assert result is True
-        mock_hid_device.write.assert_called_once()
+        mock_hid_device.send_feature_report.assert_called_once()
         
-        call_args = mock_hid_device.write.call_args[0][0]
+        call_args = mock_hid_device.send_feature_report.call_args[0][0]
         assert call_args[3] == 0x01  # mode: Rainbow
         assert call_args[4] == 75  # speed
     
@@ -185,9 +185,9 @@ class TestPicoFanHub:
         result = fan_hub.set_rgb_mode_breathing(255, 128, 64, speed=40)
         
         assert result is True
-        mock_hid_device.write.assert_called_once()
+        mock_hid_device.send_feature_report.assert_called_once()
         
-        call_args = mock_hid_device.write.call_args[0][0]
+        call_args = mock_hid_device.send_feature_report.call_args[0][0]
         assert call_args[3] == 0x02  # mode: Breathing
         assert call_args[4:7] == bytes([255, 128, 64])  # RGB
         assert call_args[7] == 40  # speed
@@ -197,9 +197,9 @@ class TestPicoFanHub:
         result = fan_hub.set_rgb_mode_static(255, 255, 255)
         
         assert result is True
-        mock_hid_device.write.assert_called_once()
+        mock_hid_device.send_feature_report.assert_called_once()
         
-        call_args = mock_hid_device.write.call_args[0][0]
+        call_args = mock_hid_device.send_feature_report.call_args[0][0]
         assert call_args[3] == 0x03  # mode: Static
         assert call_args[4:7] == bytes([255, 255, 255])  # RGB
     
@@ -208,9 +208,9 @@ class TestPicoFanHub:
         result = fan_hub.set_rgb_off()
         
         assert result is True
-        mock_hid_device.write.assert_called_once()
+        mock_hid_device.send_feature_report.assert_called_once()
         
-        call_args = mock_hid_device.write.call_args[0][0]
+        call_args = mock_hid_device.send_feature_report.call_args[0][0]
         assert call_args[3] == 0x04  # mode: Off
 
 
