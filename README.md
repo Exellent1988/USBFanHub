@@ -1,5 +1,11 @@
 # Raspberry Pi Pico USB Fan Hub
 
+[![CI](https://github.com/Exellent1988/USBFanHub/actions/workflows/ci.yml/badge.svg)](https://github.com/Exellent1988/USBFanHub/actions/workflows/ci.yml)
+[![Firmware Build](https://github.com/Exellent1988/USBFanHub/actions/workflows/firmware-build.yml/badge.svg)](https://github.com/Exellent1988/USBFanHub/actions/workflows/firmware-build.yml)
+[![Python Tests](https://github.com/Exellent1988/USBFanHub/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Exellent1988/USBFanHub/actions/workflows/python-tests.yml)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Release](https://img.shields.io/github/v/release/Exellent1988/USBFanHub)](https://github.com/Exellent1988/USBFanHub/releases)
+
 Ein USB-basierter Lüfter-Hub mit Raspberry Pi Pico, der 6x 4-Pin PWM-Lüfter steuert und unter Linux hwmon-kompatibel ist.
 
 ## Features
@@ -59,6 +65,38 @@ Ein USB-basierter Lüfter-Hub mit Raspberry Pi Pico, der 6x 4-Pin PWM-Lüfter st
 - Optokoppler oder Schmitt-Trigger für Tachometer-Filterung
 - 12V Stromversorgung für Lüfter
 - MOSFET oder Logic-Level-Shifter für RGB LEDs
+
+## CI/CD & Releases
+
+### Automatisches Bauen
+
+Dieses Projekt nutzt GitHub Actions für automatisches Bauen und Testen:
+
+- **Firmware Build**: Jeder Push zur `main`, `develop` oder `cursor/**` Branch baut die Firmware automatisch
+- **Python Tests**: Automatische Tests für Python 3.8, 3.9, 3.10, 3.11
+- **Releases**: Automatisches Erstellen von Releases bei Git-Tags (`v*.*.*`)
+
+### Artifacts herunterladen
+
+Nach jedem erfolgreichen Build:
+1. Gehe zu [Actions](https://github.com/Exellent1988/USBFanHub/actions)
+2. Wähle einen erfolgreichen Workflow-Run
+3. Lade Artifacts herunter:
+   - `pico-fan-hub-firmware-vX.X.X` - Firmware Binaries
+   - `python-packages` - Python Wheel & Source Distribution
+
+### Release erstellen
+
+Automatisch bei Tag:
+```bash
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+Manuell über GitHub Actions:
+1. Gehe zu Actions → Release
+2. "Run workflow" → Version eingeben
+3. Release wird automatisch erstellt
 
 ## Quick Start
 

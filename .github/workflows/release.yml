@@ -1,0 +1,219 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release version (e.g., v1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  build-firmware:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          gcc-arm-none-eabi \
+          libnewlib-arm-none-eabi \
+          libstdc++-arm-none-eabi-newlib \
+          build-essential
+    
+    - name: Cache Pico SDK
+      uses: actions/cache@v3
+      with:
+        path: ~/pico-sdk
+        key: ${{ runner.os }}-pico-sdk-release
+        restore-keys: |
+          ${{ runner.os }}-pico-sdk-
+    
+    - name: Download Pico SDK
+      run: |
+        cd ~
+        if [ ! -d "pico-sdk" ]; then
+          git clone https://github.com/raspberrypi/pico-sdk.git --depth=1 --branch master
+          cd pico-sdk
+          git submodule update --init
+        fi
+    
+    - name: Build Firmware
+      env:
+        PICO_SDK_PATH: ${{ github.workspace }}/../pico-sdk
+      run: |
+        cd firmware
+        mkdir -p build
+        cd build
+        cmake .. -DCMAKE_BUILD_TYPE=Release -DPICO_SDK_PATH=$HOME/pico-sdk
+        make -j$(nproc)
+    
+    - name: Extract Version
+      id: version
+      run: |
+        if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          VERSION="${{ github.event.inputs.version }}"
+        else
+          VERSION="${GITHUB_REF#refs/tags/}"
+        fi
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Release Version: ${VERSION}"
+    
+    - name: Rename Artifacts with Version
+      run: |
+        cd firmware/build
+        VERSION=${{ steps.version.outputs.version }}
+        cp pico_fan_hub.uf2 pico_fan_hub_${VERSION}.uf2
+        cp pico_fan_hub.elf pico_fan_hub_${VERSION}.elf
+        cp pico_fan_hub.bin pico_fan_hub_${VERSION}.bin
+    
+    - name: Upload Firmware Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: firmware-release
+        path: |
+          firmware/build/pico_fan_hub_*.uf2
+          firmware/build/pico_fan_hub_*.elf
+          firmware/build/pico_fan_hub_*.bin
+
+  build-software:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Build Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel setuptools twine
+    
+    - name: Build Python Package
+      working-directory: software/driver
+      run: |
+        python -m build
+    
+    - name: Upload Python Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-release
+        path: software/driver/dist/*
+
+  create-release:
+    needs: [build-firmware, build-software]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Download Firmware Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: firmware-release
+        path: release/firmware
+    
+    - name: Download Python Artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: python-release
+        path: release/python
+    
+    - name: Create Release Notes
+      run: |
+        VERSION=${{ needs.build-firmware.outputs.version }}
+        cat > release-notes.md << EOF
+        # Pico Fan Hub ${VERSION}
+        
+        ## 🎉 Release Highlights
+        
+        This release includes:
+        - Raspberry Pi Pico firmware (.uf2)
+        - Python driver package (.whl, .tar.gz)
+        - Pre-compiled binaries (.elf, .bin)
+        
+        ## 📦 Installation
+        
+        ### Firmware
+        1. Download \`pico_fan_hub_${VERSION}.uf2\`
+        2. Hold BOOTSEL button on Pico and connect USB
+        3. Copy .uf2 file to RPI-RP2 drive
+        
+        ### Software
+        \`\`\`bash
+        pip install pico-fan-hub
+        # or from wheel:
+        pip install pico_fan_hub-*-py3-none-any.whl
+        \`\`\`
+        
+        ## 📋 Features
+        
+        - 6x PWM fan control (25 kHz)
+        - 6x Tachometer RPM measurement
+        - RGB LED control (WS2812B)
+        - USB HID interface
+        - Linux hwmon compatible
+        
+        ## 📚 Documentation
+        
+        See [README.md](https://github.com/${{ github.repository }}/blob/main/README.md) for full documentation.
+        
+        ## 🐛 Bug Reports
+        
+        Please report issues at: https://github.com/${{ github.repository }}/issues
+        
+        ---
+        
+        **Full Changelog**: https://github.com/${{ github.repository }}/compare/v1.0.0...${VERSION}
+        EOF
+    
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ needs.build-firmware.outputs.version }}
+        name: Release ${{ needs.build-firmware.outputs.version }}
+        body_path: release-notes.md
+        draft: false
+        prerelease: false
+        files: |
+          release/firmware/*
+          release/python/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Generate Release Summary
+      run: |
+        echo "## 🚀 Release ${{ needs.build-firmware.outputs.version }} Created!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📦 Artifacts:" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "#### Firmware:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        ls -lh release/firmware/ >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "#### Python Package:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        ls -lh release/python/ >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Release published successfully!" >> $GITHUB_STEP_SUMMARY

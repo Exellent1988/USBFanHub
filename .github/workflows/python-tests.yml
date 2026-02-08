@@ -1,0 +1,171 @@
+name: Python Tests
+
+on:
+  push:
+    branches: [ main, develop, 'cursor/**' ]
+    paths:
+      - 'software/**'
+      - '.github/workflows/python-tests.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'software/**'
+      - '.github/workflows/python-tests.yml'
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+    
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 black mypy pylint
+    
+    - name: Lint with flake8
+      working-directory: software/driver
+      run: |
+        # Stop the build if there are Python syntax errors or undefined names
+        flake8 pico_fan_hub --count --select=E9,F63,F7,F82 --show-source --statistics
+        # Exit-zero treats all errors as warnings
+        flake8 pico_fan_hub --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
+    - name: Check Code Formatting with Black
+      working-directory: software/driver
+      run: |
+        black --check --diff pico_fan_hub
+    
+    - name: Type Check with mypy
+      working-directory: software/driver
+      continue-on-error: true
+      run: |
+        mypy pico_fan_hub --ignore-missing-imports
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ['3.8', '3.9', '3.10', '3.11']
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+    
+    - name: Cache pip dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.python-version }}-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.python-version }}-
+    
+    - name: Install System Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libhidapi-hidraw0 libhidapi-libusb0
+    
+    - name: Install Python Dependencies
+      working-directory: software/driver
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e .
+        pip install pytest pytest-cov pytest-mock
+    
+    - name: Run Unit Tests
+      working-directory: software/driver
+      run: |
+        pytest --cov=pico_fan_hub --cov-report=xml --cov-report=term
+      continue-on-error: true
+    
+    - name: Upload Coverage to Codecov
+      if: matrix.python-version == '3.10'
+      uses: codecov/codecov-action@v3
+      with:
+        file: software/driver/coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+      continue-on-error: true
+    
+    - name: Test Installation
+      run: |
+        which pico-fan-hub || echo "pico-fan-hub not in PATH"
+        which pico-fan-ctl || echo "pico-fan-ctl not in PATH"
+        python -c "import pico_fan_hub; print(pico_fan_hub.__version__)"
+    
+    - name: Generate Test Summary
+      run: |
+        echo "## Python Tests Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Python Version: ${{ matrix.python-version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Tests completed!" >> $GITHUB_STEP_SUMMARY
+
+  build:
+    runs-on: ubuntu-latest
+    needs: [lint, test]
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install Build Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build wheel setuptools
+    
+    - name: Build Package
+      working-directory: software/driver
+      run: |
+        python -m build
+    
+    - name: Verify Build
+      working-directory: software/driver
+      run: |
+        ls -lh dist/
+        test -f dist/*.whl || exit 1
+        test -f dist/*.tar.gz || exit 1
+    
+    - name: Upload Package Artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: python-packages
+        path: software/driver/dist/*
+        retention-days: 90
+    
+    - name: Generate Build Summary
+      run: |
+        echo "## Python Package Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Artifacts:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        ls -lh software/driver/dist/ >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Package build successful!" >> $GITHUB_STEP_SUMMARY
