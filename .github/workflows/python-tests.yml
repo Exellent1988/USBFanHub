@@ -101,7 +101,7 @@ jobs:
     
     - name: Upload Coverage to Codecov
       if: matrix.python-version == '3.10'
-      uses: codecov/codecov-action@v4
+      uses: codecov/codecov-action@v5
       with:
         file: software/driver/coverage.xml
         flags: unittests
