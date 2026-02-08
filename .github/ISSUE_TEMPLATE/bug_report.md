@@ -1,85 +1,85 @@
 ---
 name: Bug Report
-about: Melde einen Bug um uns zu helfen besser zu werden
+about: Report a bug to help us improve
 title: '[BUG] '
 labels: bug
 assignees: ''
 ---
 
-## 🐛 Bug-Beschreibung
+## 🐛 Bug Description
 
-Eine klare und präzise Beschreibung des Bugs.
+A clear and concise description of the bug.
 
-## 🔄 Reproduzieren
+## 🔄 Reproduce
 
-Schritte um das Verhalten zu reproduzieren:
+Steps to reproduce the behavior:
 
-1. Gehe zu '...'
-2. Klicke auf '....'
-3. Scrolle runter zu '....'
-4. Siehe Fehler
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-## ✅ Erwartetes Verhalten
+## ✅ Expected Behavior
 
-Eine klare und präzise Beschreibung was du erwartet hast.
+A clear and concise description of what you expected to happen.
 
 ## 📸 Screenshots
 
-Falls relevant, füge Screenshots hinzu um das Problem zu erklären.
+If applicable, add screenshots to explain the problem.
 
-## 🖥️ System-Information
+## 🖥️ System Information
 
 **Hardware:**
-- Raspberry Pi Pico: [ja/nein]
-- Lüfter-Typ: [z.B. Noctua NF-A12x25]
-- RGB LEDs: [WS2812B, Anzahl]
+- Raspberry Pi Pico: [yes/no]
+- Fan type: [e.g., Noctua NF-A12x25]
+- RGB LEDs: [WS2812B, count]
 
 **Software:**
-- OS: [z.B. Ubuntu 22.04]
-- Python Version: [z.B. 3.10.5]
-- Firmware Version: [z.B. v1.0.0]
-- Driver Version: [z.B. 1.0.0]
+- OS: [e.g., Ubuntu 22.04]
+- Python version: [e.g., 3.10.5]
+- Firmware version: [e.g., v1.0.0]
+- Driver version: [e.g., 1.0.0]
 
-**Komponente:**
+**Component:**
 - [ ] Firmware (Pico)
-- [ ] Python Driver
-- [ ] CLI Tool
+- [ ] Python driver
+- [ ] CLI tool
 - [ ] Hardware
-- [ ] Dokumentation
+- [ ] Documentation
 
 ## 📋 Logs
 
 ```
-Füge relevante Logs hier ein
+Insert relevant logs here
 ```
 
-**Firmware Logs:**
+**Firmware logs:**
 ```
-# Falls DEBUG aktiviert
+# If DEBUG enabled
 ```
 
-**Python Logs:**
+**Python logs:**
 ```bash
-# Output von:
+# Output from:
 pico-fan-ctl status
-# oder
+# or
 python -m pico_fan_hub.cli status
 ```
 
-**USB Logs:**
+**USB logs:**
 ```bash
-# Output von:
+# Output from:
 lsusb | grep 2e8a
 dmesg | tail -20
 ```
 
-## 🔍 Zusätzlicher Kontext
+## 🔍 Additional Context
 
-Weitere Informationen zum Problem.
+Additional information about the problem.
 
-## ✅ Checkliste
+## ✅ Checklist
 
-- [ ] Ich habe die Dokumentation gelesen
-- [ ] Ich habe nach ähnlichen Issues gesucht
-- [ ] Ich habe die neueste Version getestet
-- [ ] Ich kann das Problem reproduzieren
+- [ ] I have read the documentation
+- [ ] I have searched for similar issues
+- [ ] I have tested with the latest version
+- [ ] I can reproduce the problem

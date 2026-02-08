@@ -1,12 +1,12 @@
-# Mitwirken am Pico Fan Hub Projekt
+# Contributing to Pico Fan Hub
 
-Vielen Dank für dein Interesse am Pico Fan Hub Projekt!
+Thank you for your interest in the Pico Fan Hub project!
 
-## Entwicklungs-Setup
+## Development Setup
 
-### Firmware-Entwicklung
+### Firmware Development
 
-1. **Pico SDK installieren:**
+1. **Install Pico SDK:**
    ```bash
    cd ~
    git clone https://github.com/raspberrypi/pico-sdk.git
@@ -15,126 +15,126 @@ Vielen Dank für dein Interesse am Pico Fan Hub Projekt!
    export PICO_SDK_PATH=~/pico-sdk
    ```
 
-2. **Build-Tools installieren:**
+2. **Install build tools:**
    ```bash
    sudo apt install cmake gcc-arm-none-eabi libnewlib-arm-none-eabi
    ```
 
-3. **Firmware bauen:**
+3. **Build firmware:**
    ```bash
    cd firmware
    ./build.sh
    ```
 
-### Linux Software-Entwicklung
+### Linux Software Development
 
-1. **Abhängigkeiten installieren:**
+1. **Install dependencies:**
    ```bash
    sudo apt install python3-pip python3-hid libhidapi-hidraw0
    ```
 
-2. **Entwicklungs-Installation:**
+2. **Development installation:**
    ```bash
    cd software/driver
    pip3 install -e .
    ```
 
-3. **Tests ausführen:**
+3. **Run tests:**
    ```bash
    python3 -m pytest
    ```
 
-## Projekt-Struktur
+## Project Structure
 
 ```
 .
-├── firmware/               # Pico Firmware (C/C++)
-│   ├── src/               # Quellcode
-│   ├── include/           # Header-Dateien
-│   └── build.sh           # Build-Script
-├── software/              # Linux Software
-│   └── driver/            # Python hwmon-Driver
-├── hardware/              # Hardware-Dokumentation
-│   ├── pinout.md          # Pin-Zuweisungen
-│   └── schematic_suggestions.md  # KiCad-Vorschläge
-├── docs/                  # Dokumentation
-└── README.md              # Hauptdokumentation
+├── firmware/               # Pico firmware (C/C++)
+│   ├── src/               # Source code
+│   ├── include/           # Header files
+│   └── build.sh           # Build script
+├── software/              # Linux software
+│   └── driver/            # Python hwmon driver
+├── hardware/              # Hardware documentation
+│   ├── pinout.md          # Pin assignments
+│   └── schematic_suggestions.md  # KiCad suggestions
+├── docs/                  # Documentation
+└── README.md              # Main documentation
 ```
 
-## Code-Richtlinien
+## Code Guidelines
 
 ### Firmware (C/C++)
 
-- **Stil:** K&R C Style
-- **Einrückung:** 4 Spaces
-- **Kommentare:** Englisch oder Deutsch
-- **Dokumentation:** Doxygen-kompatibel
+- **Style:** K&R C Style
+- **Indentation:** 4 spaces
+- **Comments:** English
+- **Documentation:** Doxygen-compatible
 
-**Beispiel:**
+**Example:**
 ```c
 /**
- * @brief Setzt PWM für einen Lüfter
- * @param fan_index Lüfter-Index (0-5)
- * @param duty_cycle PWM Duty Cycle (0-255)
+ * @brief Sets PWM for a fan
+ * @param fan_index Fan index (0-5)
+ * @param duty_cycle PWM duty cycle (0-255)
  */
 void pwm_control_set_duty(uint8_t fan_index, uint8_t duty_cycle) {
     if (fan_index >= NUM_FANS) {
         return;
     }
-    // Implementierung...
+    // Implementation...
 }
 ```
 
 ### Python
 
-- **Stil:** PEP 8
-- **Einrückung:** 4 Spaces
-- **Type Hints:** Verwenden wo möglich
+- **Style:** PEP 8
+- **Indentation:** 4 spaces
+- **Type Hints:** Use where possible
 - **Docstrings:** Google Style
 
-**Beispiel:**
+**Example:**
 ```python
 def set_fan_pwm(self, fan_index: int, duty_cycle: int) -> bool:
     """
-    Setzt PWM für einen Lüfter.
+    Sets PWM for a fan.
     
     Args:
-        fan_index: Lüfter-Index (0-5)
-        duty_cycle: PWM-Wert (0-255)
+        fan_index: Fan index (0-5)
+        duty_cycle: PWM value (0-255)
         
     Returns:
-        True bei Erfolg, False bei Fehler
+        True on success, False on error
     """
     if fan_index < 0 or fan_index >= self.num_fans:
         return False
-    # Implementierung...
+    # Implementation...
 ```
 
 ## Git Workflow
 
-1. **Fork das Repository**
+1. **Fork the repository**
 
-2. **Erstelle einen Feature-Branch:**
+2. **Create a feature branch:**
    ```bash
-   git checkout -b feature/mein-feature
+   git checkout -b feature/my-feature
    ```
 
-3. **Committe deine Änderungen:**
+3. **Commit your changes:**
    ```bash
    git add .
-   git commit -m "feat(pwm): Neue PWM-Frequenz-Einstellung"
+   git commit -m "feat(pwm): Add new PWM frequency setting"
    ```
 
-4. **Push zum Fork:**
+4. **Push to fork:**
    ```bash
-   git push origin feature/mein-feature
+   git push origin feature/my-feature
    ```
 
-5. **Erstelle einen Pull Request**
+5. **Create a Pull Request**
 
-### Commit-Message-Format
+### Commit Message Format
 
-Wir verwenden [Conventional Commits](https://www.conventionalcommits.org/):
+We use [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
 <type>(<scope>): <subject>
@@ -145,79 +145,79 @@ Wir verwenden [Conventional Commits](https://www.conventionalcommits.org/):
 ```
 
 **Types:**
-- `feat`: Neues Feature
+- `feat`: New feature
 - `fix`: Bugfix
-- `docs`: Dokumentation
-- `style`: Formatierung
-- `refactor`: Code-Refactoring
+- `docs`: Documentation
+- `style`: Formatting
+- `refactor`: Code refactoring
 - `test`: Tests
-- `chore`: Build-System, Dependencies
+- `chore`: Build system, dependencies
 
-**Beispiele:**
+**Examples:**
 ```
-feat(rgb): Rainbow-Effekt hinzugefügt
-fix(tachometer): RPM-Berechnung korrigiert
-docs(hardware): Pinout-Dokumentation erweitert
+feat(rgb): Add rainbow effect
+fix(tachometer): Correct RPM calculation
+docs(hardware): Expand pinout documentation
 ```
 
 ## Testing
 
-### Firmware-Tests
+### Firmware Tests
 
-Manuelle Tests mit Hardware erforderlich. Test-Checkliste:
+Manual tests with hardware required. Test checklist:
 
-- [ ] PWM-Ausgabe mit Oszilloskop messen (25 kHz)
-- [ ] Tachometer-Eingang mit verschiedenen Lüftern testen
-- [ ] RGB-Ausgabe mit WS2812B-Strip testen
-- [ ] USB-Enumeration prüfen (`lsusb`)
-- [ ] Alle HID-Reports testen
+- [ ] Measure PWM output with oscilloscope (25 kHz)
+- [ ] Test tachometer input with various fans
+- [ ] Test RGB output with WS2812B strip
+- [ ] Check USB enumeration (`lsusb`)
+- [ ] Test all HID reports
 
-### Software-Tests
+### Software Tests
 
 ```bash
 cd software/driver
 python3 -m pytest tests/
 ```
 
-### Integration-Tests
+### Integration Tests
 
-1. Firmware auf Pico flashen
-2. Mit Linux-System verbinden
-3. Driver starten
-4. Alle CLI-Befehle testen
+1. Flash firmware on Pico
+2. Connect to Linux system
+3. Start driver
+4. Test all CLI commands
 
-## Hardware-Tests
+## Hardware Tests
 
-Wenn du Hardware-Änderungen vorschlägst:
+If you're proposing hardware changes:
 
-1. **Simulation:** LTspice oder ähnlich
-2. **Breadboard-Prototyp:** Erst testen
-3. **Messungen:** Oszilloskop-Screenshots
-4. **Dokumentation:** Schaltplan + Erklärung
+1. **Simulation:** LTspice or similar
+2. **Breadboard prototype:** Test first
+3. **Measurements:** Oscilloscope screenshots
+4. **Documentation:** Schematic + explanation
 
-## Dokumentation
+## Documentation
 
-- **Neue Features:** In README.md dokumentieren
-- **API-Änderungen:** In docs/usb_protocol.md aktualisieren
-- **Hardware:** In hardware/ Ordner dokumentieren
-- **Beispiele:** Immer Beispiel-Code bereitstellen
+- **New features:** Document in README.md
+- **API changes:** Update docs/usb_protocol.md
+- **Hardware:** Document in hardware/ directory
+- **Examples:** Always provide example code
 
 ## Pull Request Checklist
 
-Vor dem Einreichen eines Pull Requests:
+Before submitting a pull request:
 
-- [ ] Code kompiliert ohne Warnungen
-- [ ] Tests laufen durch
-- [ ] Dokumentation aktualisiert
-- [ ] Commit-Messages folgen Convention
-- [ ] Code-Stil eingehalten
-- [ ] Keine unnötigen Dateien committed
-- [ ] Feature wurde getestet (Beschreibung im PR)
+- [ ] Code compiles without warnings
+- [ ] Tests pass
+- [ ] Documentation updated
+- [ ] Commit messages follow convention
+- [ ] Code style adhered to
+- [ ] No unnecessary files committed
+- [ ] Feature was tested (description in PR)
 
-## Fragen?
+## Questions?
 
-Bei Fragen erstelle ein Issue oder kontaktiere die Maintainer.
+If you have questions, create an issue or contact the maintainers.
 
-## Lizenz
+## License
 
-Durch deine Beiträge stimmst du zu, dass deine Änderungen unter der gleichen Lizenz wie das Projekt veröffentlicht werden.
+By contributing, you agree that your contributions will be licensed under the same license as the project.

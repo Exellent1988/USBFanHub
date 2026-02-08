@@ -1,84 +1,84 @@
 ---
 name: Feature Request
-about: Schlage ein neues Feature für dieses Projekt vor
+about: Suggest a new feature for this project
 title: '[FEATURE] '
 labels: enhancement
 assignees: ''
 ---
 
-## 🚀 Feature-Beschreibung
+## 🚀 Feature Description
 
-Eine klare und präzise Beschreibung des gewünschten Features.
+A clear and concise description of the desired feature.
 
 ## 🎯 Problem/Motivation
 
-Welches Problem würde dieses Feature lösen? Bitte beschreibe.
+What problem would this feature solve? Please describe.
 
-**Beispiel:**
-"Ich bin frustriert wenn [...]"
-"Es wäre hilfreich wenn [...]"
+**Example:**
+"I'm frustrated when [...]"
+"It would be helpful if [...]"
 
-## 💡 Vorgeschlagene Lösung
+## 💡 Proposed Solution
 
-Eine klare Beschreibung was du dir vorstellst.
+A clear description of what you envision.
 
-## 🔄 Alternativen
+## 🔄 Alternatives
 
-Hast du alternative Lösungen oder Features in Betracht gezogen?
+Have you considered alternative solutions or features?
 
-## 🖥️ Betroffene Komponenten
+## 🖥️ Affected Components
 
-Welche Teile des Projekts wären betroffen?
+Which parts of the project would be affected?
 
 - [ ] Firmware (Pico)
-- [ ] Python Software
-- [ ] Hardware-Design
-- [ ] CLI Tool
-- [ ] Dokumentation
+- [ ] Python software
+- [ ] Hardware design
+- [ ] CLI tool
+- [ ] Documentation
 - [ ] CI/CD
 
-## 📋 Implementierungs-Ideen
+## 📋 Implementation Ideas
 
-Falls du bereits Ideen zur Implementierung hast:
+If you already have implementation ideas:
 
 **Firmware:**
 ```c
-// Pseudo-Code oder Ideen
+// Pseudocode or ideas
 ```
 
 **Python:**
 ```python
-# Pseudo-Code oder Ideen
+# Pseudocode or ideas
 ```
 
 **Hardware:**
-<!-- Schaltungs-Ideen, Komponenten, etc. -->
+<!-- Circuit ideas, components, etc. -->
 
-## ✅ Akzeptanz-Kriterien
+## ✅ Acceptance Criteria
 
-Was muss erfüllt sein damit das Feature als "fertig" gilt?
+What must be met for the feature to be considered "done"?
 
-- [ ] Kriterium 1
-- [ ] Kriterium 2
-- [ ] Kriterium 3
+- [ ] Criterion 1
+- [ ] Criterion 2
+- [ ] Criterion 3
 
-## 🎨 Mockups/Skizzen
+## 🎨 Mockups/Sketches
 
-Falls relevant, füge Mockups, Diagramme oder Skizzen hinzu.
+If relevant, add mockups, diagrams, or sketches.
 
-## 📚 Referenzen
+## 📚 References
 
-Links zu ähnlichen Implementierungen, Standards, oder Dokumentation.
+Links to similar implementations, standards, or documentation.
 
-## 🤔 Zusätzlicher Kontext
+## 🤔 Additional Context
 
-Weitere Informationen oder Screenshots zum Feature-Request.
+Additional information or screenshots about the feature request.
 
-## 💬 Diskussion
+## 💬 Discussion
 
-Bist du bereit an der Implementierung mitzuarbeiten?
+Are you willing to help with implementation?
 
-- [ ] Ja, ich kann Code beisteuern
-- [ ] Ja, ich kann beim Testing helfen
-- [ ] Ja, ich kann Dokumentation schreiben
-- [ ] Nein, aber ich würde das Feature nutzen
+- [ ] Yes, I can contribute code
+- [ ] Yes, I can help with testing
+- [ ] Yes, I can write documentation
+- [ ] No, but I would use the feature

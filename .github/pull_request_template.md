@@ -1,57 +1,57 @@
-## Beschreibung
+## Description
 
-<!-- Beschreibe deine Änderungen hier -->
+<!-- Describe your changes here -->
 
-## Art der Änderung
+## Type of Change
 
-Bitte markiere relevante Optionen:
+Please check relevant options:
 
-- [ ] 🐛 Bug Fix (non-breaking change, behebt ein Problem)
-- [ ] ✨ Neues Feature (non-breaking change, fügt Funktionalität hinzu)
-- [ ] 💥 Breaking Change (Fix oder Feature, das bestehende Funktionalität ändert)
-- [ ] 📚 Dokumentation (nur Dokumentations-Änderungen)
-- [ ] 🔧 Wartung (Dependency Updates, Refactoring, etc.)
+- [ ] 🐛 Bug fix (non-breaking change that fixes an issue)
+- [ ] ✨ New feature (non-breaking change that adds functionality)
+- [ ] 💥 Breaking change (fix or feature that changes existing functionality)
+- [ ] 📚 Documentation (documentation changes only)
+- [ ] 🔧 Maintenance (dependency updates, refactoring, etc.)
 
-## Betroffene Komponenten
+## Affected Components
 
 - [ ] Firmware (Raspberry Pi Pico)
-- [ ] Python Software (Driver/CLI)
-- [ ] Hardware-Design (KiCad/Schaltplan)
-- [ ] Dokumentation
+- [ ] Python software (driver/CLI)
+- [ ] Hardware design (KiCad/schematic)
+- [ ] Documentation
 - [ ] CI/CD (GitHub Actions)
 
-## Wie wurde getestet?
+## How Has This Been Tested?
 
-<!-- Beschreibe deine Tests -->
+<!-- Describe your tests -->
 
-- [ ] Firmware kompiliert ohne Fehler
-- [ ] Python Tests laufen durch
-- [ ] Manuelle Tests durchgeführt
-- [ ] Hardware getestet (falls relevant)
+- [ ] Firmware compiles without errors
+- [ ] Python tests pass
+- [ ] Manual testing performed
+- [ ] Hardware tested (if relevant)
 
-**Test-Konfiguration:**
+**Test Configuration:**
 - Hardware: 
 - OS: 
-- Python Version: 
+- Python version: 
 
-## Checkliste
+## Checklist
 
-- [ ] Code folgt dem Stil des Projekts
-- [ ] Self-Review durchgeführt
-- [ ] Kommentare für schwer verständliche Bereiche
-- [ ] Dokumentation aktualisiert
-- [ ] Keine neuen Warnungen beim Kompilieren
-- [ ] Tests hinzugefügt (falls relevant)
-- [ ] Alle Tests bestehen lokal
-- [ ] CI/CD Checks bestehen
+- [ ] Code follows project style
+- [ ] Self-review performed
+- [ ] Comments added for hard-to-understand areas
+- [ ] Documentation updated
+- [ ] No new warnings when compiling
+- [ ] Tests added (if relevant)
+- [ ] All tests pass locally
+- [ ] CI/CD checks pass
 
 ## Screenshots/Logs
 
-<!-- Falls relevant -->
+<!-- If relevant -->
 
-## Zusätzliche Notizen
+## Additional Notes
 
-<!-- Weitere Informationen für Reviewer -->
+<!-- Additional information for reviewers -->
 
 ## Related Issues
 

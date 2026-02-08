@@ -1,80 +1,80 @@
 # Changelog
 
-Alle bedeutenden Änderungen an diesem Projekt werden in dieser Datei dokumentiert.
+All notable changes to this project will be documented in this file.
 
-Das Format basiert auf [Keep a Changelog](https://keepachangelog.com/de/1.0.0/),
-und dieses Projekt folgt [Semantic Versioning](https://semver.org/lang/de/).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Hinzugefügt
-- Initiales Projekt-Setup
-- Pico-Firmware mit vollständiger Funktionalität:
-  - 6x PWM-Ausgänge (25 kHz) für Lüfter-Steuerung
-  - 6x Tachometer-Eingänge für RPM-Messung
-  - RGB LED-Steuerung via WS2812B/NeoPixel (PIO-basiert)
-  - USB HID Interface für Kommunikation
-  - Watchdog für Sicherheit
-- Linux Software:
-  - Python-basierter USB HID Driver
-  - hwmon-kompatible sysfs-Bridge
-  - CLI-Tool für direkte Steuerung
-  - Daemon für hwmon-Integration
-- Umfangreiche Dokumentation:
-  - Hardware-Pinout und Schaltungsvorschläge
-  - USB HID Protokoll-Spezifikation
-  - RGB-Steuerungs-Dokumentation
-  - Build- und Installations-Anleitungen
-  - KiCad Schaltplan-Vorschläge
-- Build-Automatisierung:
-  - CMake Build-System für Firmware
-  - Python setuptools für Software
-  - Build-Script mit Fehlerbehandlung
-- Git-Infrastruktur:
-  - .gitignore für alle Artefakte
-  - CONTRIBUTING.md für Entwickler
-  - Dieser CHANGELOG
+### Added
+- Initial project setup
+- Pico firmware with complete functionality:
+  - 6x PWM outputs (25 kHz) for fan control
+  - 6x Tachometer inputs for RPM measurement
+  - RGB LED control via WS2812B/NeoPixel (PIO-based)
+  - USB HID interface for communication
+  - Watchdog for safety
+- Linux software:
+  - Python-based USB HID driver
+  - hwmon-compatible sysfs bridge
+  - CLI tool for direct control
+  - Daemon for hwmon integration
+- Comprehensive documentation:
+  - Hardware pinout and circuit suggestions
+  - USB HID protocol specification
+  - RGB control documentation
+  - Build and installation guides
+  - KiCad schematic suggestions
+- Build automation:
+  - CMake build system for firmware
+  - Python setuptools for software
+  - Build script with error handling
+- Git infrastructure:
+  - .gitignore for all artifacts
+  - CONTRIBUTING.md for developers
+  - This CHANGELOG
 
 ## [1.0.0] - TBD
 
-Erste offizielle Release-Version (geplant nach Hardware-Tests)
+First official release (planned after hardware testing)
 
-### Geplant
-- Hardware-Tests mit echten Lüftern
-- Performance-Optimierungen
-- Erweiterte Fehlerbehandlung
-- Zusätzliche RGB-Effekte
-- OpenRGB-Integration
-- liquidctl-Kompatibilität
+### Planned
+- Hardware testing with real fans
+- Performance optimizations
+- Extended error handling
+- Additional RGB effects
+- OpenRGB integration
+- liquidctl compatibility
 
 ## Roadmap
 
-### v1.1.0 (geplant)
-- [ ] Temperatursensor-Unterstützung (I2C)
-- [ ] OLED-Display für Status-Anzeige
-- [ ] Erweiterte Lüfter-Kurven (PID-Regler)
-- [ ] Konfigurationsspeicherung im Flash
-- [ ] Web-Interface für Konfiguration
+### v1.1.0 (planned)
+- [ ] Temperature sensor support (I2C)
+- [ ] OLED display for status
+- [ ] Advanced fan curves (PID controller)
+- [ ] Configuration storage in flash
+- [ ] Web interface for configuration
 
-### v1.2.0 (geplant)
-- [ ] Unterstützung für mehr als 6 Lüfter
-- [ ] Mehrere RGB-Kanäle
-- [ ] Audio-reaktive RGB-Modi
-- [ ] Erweitertes Monitoring (Spannung, Strom)
+### v1.2.0 (planned)
+- [ ] Support for more than 6 fans
+- [ ] Multiple RGB channels
+- [ ] Audio-reactive RGB modes
+- [ ] Extended monitoring (voltage, current)
 
-### v2.0.0 (Zukunft)
-- [ ] Drahtlose Steuerung (Bluetooth/WiFi)
-- [ ] Mobile App (Android/iOS)
-- [ ] Cloud-Integration für Remote-Monitoring
-- [ ] Machine Learning für automatische Lüfter-Kurven
+### v2.0.0 (future)
+- [ ] Wireless control (Bluetooth/WiFi)
+- [ ] Mobile app (Android/iOS)
+- [ ] Cloud integration for remote monitoring
+- [ ] Machine learning for automatic fan curves
 
 ---
 
-## Format-Legende
+## Format Legend
 
-- `Hinzugefügt` für neue Features
-- `Geändert` für Änderungen an bestehender Funktionalität
-- `Veraltet` für bald zu entfernende Features
-- `Entfernt` für entfernte Features
-- `Behoben` für Bugfixes
-- `Sicherheit` für Sicherheits-Updates
+- `Added` for new features
+- `Changed` for changes to existing functionality
+- `Deprecated` for soon-to-be removed features
+- `Removed` for removed features
+- `Fixed` for bugfixes
+- `Security` for security updates
