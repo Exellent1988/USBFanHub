@@ -1,0 +1,53 @@
+;
+; WS2812B PIO-Programm für RP2040
+; 
+; Basiert auf dem offiziellen Pico-Examples WS2812 Code
+; Sendet RGB-Daten an WS2812B LEDs
+;
+
+.program ws2812
+.side_set 1
+
+.define public T1 2
+.define public T2 5
+.define public T3 3
+
+.wrap_target
+bitloop:
+    out x, 1       side 0 [T3 - 1] ; Bit aus OSR lesen, Low ausgeben
+    jmp !x do_zero side 1 [T1 - 1] ; Wenn Bit 0, springe zu do_zero, sonst High
+do_one:
+    jmp  bitloop   side 1 [T2 - 1] ; Bit 1: High für T1+T2 cycles
+do_zero:
+    nop            side 0 [T2 - 1] ; Bit 0: High nur für T1 cycles
+.wrap
+
+% c-sdk {
+#include "hardware/clocks.h"
+
+static inline void ws2812_program_init(PIO pio, uint sm, uint offset, uint pin, float freq) {
+    pio_gpio_init(pio, pin);
+    pio_sm_set_consecutive_pindirs(pio, sm, pin, 1, true);
+
+    pio_sm_config c = ws2812_program_get_default_config(offset);
+    sm_config_set_sideset_pins(&c, pin);
+    sm_config_set_out_shift(&c, false, true, 24);  // GRB = 24 Bit
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+
+    int cycles_per_bit = ws2812_T1 + ws2812_T2 + ws2812_T3;
+    float div = clock_get_hz(clk_sys) / (freq * cycles_per_bit);
+    sm_config_set_clkdiv(&c, div);
+
+    pio_sm_init(pio, sm, offset, &c);
+    pio_sm_set_enabled(pio, sm, true);
+}
+
+static inline void ws2812_put_pixel(PIO pio, uint sm, uint32_t pixel_grb) {
+    pio_sm_put_blocking(pio, sm, pixel_grb << 8u);
+}
+
+static inline uint32_t ws2812_rgb_to_grb(uint8_t r, uint8_t g, uint8_t b) {
+    return ((uint32_t)g << 16) | ((uint32_t)r << 8) | (uint32_t)b;
+}
+
+%}
