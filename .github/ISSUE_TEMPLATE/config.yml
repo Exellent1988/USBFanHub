@@ -1,0 +1,11 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Dokumentation
+    url: https://github.com/Exellent1988/USBFanHub/tree/main/docs
+    about: Lies die Dokumentation für Hilfe und Anleitungen
+  - name: 💬 Diskussionen
+    url: https://github.com/Exellent1988/USBFanHub/discussions
+    about: Stelle Fragen und diskutiere mit der Community
+  - name: 🔧 Hardware Probleme
+    url: https://github.com/Exellent1988/USBFanHub/tree/main/hardware
+    about: Hardware-spezifische Dokumentation und Schaltpläne

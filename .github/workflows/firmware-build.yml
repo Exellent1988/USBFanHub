@@ -1,0 +1,134 @@
+name: Firmware Build
+
+on:
+  push:
+    branches: [ main, develop, 'cursor/**' ]
+    paths:
+      - 'firmware/**'
+      - '.github/workflows/firmware-build.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'firmware/**'
+      - '.github/workflows/firmware-build.yml'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Cache Pico SDK
+      id: cache-pico-sdk
+      uses: actions/cache@v3
+      with:
+        path: ~/pico-sdk
+        key: ${{ runner.os }}-pico-sdk-${{ hashFiles('**/pico_sdk_import.cmake') }}
+        restore-keys: |
+          ${{ runner.os }}-pico-sdk-
+    
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          cmake \
+          gcc-arm-none-eabi \
+          libnewlib-arm-none-eabi \
+          libstdc++-arm-none-eabi-newlib \
+          build-essential
+    
+    - name: Download Pico SDK
+      if: steps.cache-pico-sdk.outputs.cache-hit != 'true'
+      run: |
+        cd ~
+        git clone https://github.com/raspberrypi/pico-sdk.git --depth=1 --branch master
+        cd pico-sdk
+        git submodule update --init
+    
+    - name: Set Pico SDK Path
+      run: echo "PICO_SDK_PATH=$HOME/pico-sdk" >> $GITHUB_ENV
+    
+    - name: Verify Pico SDK
+      run: |
+        ls -la $PICO_SDK_PATH
+        test -f $PICO_SDK_PATH/pico_sdk_init.cmake || exit 1
+    
+    - name: Create Build Directory
+      run: mkdir -p firmware/build
+    
+    - name: Configure CMake
+      working-directory: firmware/build
+      run: |
+        cmake .. \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DPICO_SDK_PATH=$PICO_SDK_PATH
+    
+    - name: Build Firmware
+      working-directory: firmware/build
+      run: |
+        make -j$(nproc)
+    
+    - name: Verify Build Artifacts
+      working-directory: firmware/build
+      run: |
+        ls -lh pico_fan_hub.*
+        test -f pico_fan_hub.uf2 || exit 1
+        test -f pico_fan_hub.elf || exit 1
+        test -f pico_fan_hub.bin || exit 1
+    
+    - name: Get Firmware Size Info
+      working-directory: firmware/build
+      run: |
+        arm-none-eabi-size pico_fan_hub.elf
+        echo "---"
+        ls -lh pico_fan_hub.uf2
+    
+    - name: Extract Version Info
+      id: version
+      run: |
+        VERSION_MAJOR=$(grep "PICO_FAN_HUB_VERSION_MAJOR" firmware/CMakeLists.txt | grep -oP '\d+')
+        VERSION_MINOR=$(grep "PICO_FAN_HUB_VERSION_MINOR" firmware/CMakeLists.txt | grep -oP '\d+')
+        VERSION_PATCH=$(grep "PICO_FAN_HUB_VERSION_PATCH" firmware/CMakeLists.txt | grep -oP '\d+')
+        VERSION="${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}"
+        echo "version=${VERSION}" >> $GITHUB_OUTPUT
+        echo "Firmware Version: ${VERSION}"
+    
+    - name: Upload Firmware Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: pico-fan-hub-firmware-v${{ steps.version.outputs.version }}
+        path: |
+          firmware/build/pico_fan_hub.uf2
+          firmware/build/pico_fan_hub.elf
+          firmware/build/pico_fan_hub.bin
+        retention-days: 90
+    
+    - name: Upload UF2 for Release
+      uses: actions/upload-artifact@v4
+      with:
+        name: pico_fan_hub.uf2
+        path: firmware/build/pico_fan_hub.uf2
+        retention-days: 90
+    
+    - name: Generate Build Summary
+      run: |
+        echo "## Firmware Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Version: ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Build Artifacts:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        ls -lh firmware/build/pico_fan_hub.* >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### Size Information:" >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        arm-none-eabi-size firmware/build/pico_fan_hub.elf >> $GITHUB_STEP_SUMMARY
+        echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Firmware build successful!" >> $GITHUB_STEP_SUMMARY

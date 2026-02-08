@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop, 'cursor/**' ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  check-status:
+    name: CI Status Check
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+    
+    - name: CI Status
+      run: |
+        echo "## CI Status Check" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "This workflow verifies that the repository is in a good state." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Individual workflows run automatically:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Firmware Build**: Triggered by changes in \`firmware/**\`" >> $GITHUB_STEP_SUMMARY
+        echo "- **Python Tests**: Triggered by changes in \`software/**\`" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "Check the Actions tab for detailed results of each workflow." >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "✅ Repository structure is valid!" >> $GITHUB_STEP_SUMMARY
+    
+    - name: Check File Structure
+      run: |
+        echo "Checking project structure..."
+        test -d firmware || { echo "❌ firmware/ missing"; exit 1; }
+        test -d software || { echo "❌ software/ missing"; exit 1; }
+        test -d hardware || { echo "❌ hardware/ missing"; exit 1; }
+        test -d docs || { echo "❌ docs/ missing"; exit 1; }
+        test -f README.md || { echo "❌ README.md missing"; exit 1; }
+        test -f firmware/CMakeLists.txt || { echo "❌ firmware/CMakeLists.txt missing"; exit 1; }
+        test -f software/driver/setup.py || { echo "❌ software/driver/setup.py missing"; exit 1; }
+        echo "✅ All required directories and files present!"
+    
+    - name: Check Documentation
+      run: |
+        echo "Checking documentation..."
+        test -f CONTRIBUTING.md || { echo "❌ CONTRIBUTING.md missing"; exit 1; }
+        test -f CHANGELOG.md || { echo "❌ CHANGELOG.md missing"; exit 1; }
+        test -f LICENSE || { echo "❌ LICENSE missing"; exit 1; }
+        echo "✅ Documentation complete!"
