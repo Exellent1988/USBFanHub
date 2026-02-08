@@ -34,29 +34,56 @@ uint8_t const *tud_descriptor_device_cb(void) {
 // HID Report Descriptor
 //--------------------------------------------------------------------+
 uint8_t const desc_hid_report[] = {
-    // Fan PWM Control (Report ID 0x01)
-    TUD_HID_REPORT_DESC_GENERIC_INOUT(HID_REPORT_ID_FAN_PWM, 8),
-    
-    // Fan RPM Reading (Report ID 0x02)
-    TUD_HID_REPORT_DESC_GENERIC_INOUT(HID_REPORT_ID_FAN_RPM, 13),
-    
-    // RGB Control (Report ID 0x03)
-    TUD_HID_REPORT_DESC_GENERIC_INOUT(HID_REPORT_ID_RGB_CONTROL, 64),
-    
-    // Configuration (Report ID 0x04)
-    TUD_HID_REPORT_DESC_GENERIC_INOUT(HID_REPORT_ID_CONFIG, 16),
-    
-    // Status (Report ID 0x10) - Input only
+    // Vendor-specific HID descriptor
     0x06, 0x00, 0xFF,  // Usage Page (Vendor Defined)
     0x09, 0x01,        // Usage (Vendor Usage 1)
     0xA1, 0x01,        // Collection (Application)
-    0x85, HID_REPORT_ID_STATUS,  // Report ID
+    
+    // Report ID 0x01: Fan PWM Control (8 bytes)
+    0x85, HID_REPORT_ID_FAN_PWM,  // Report ID
     0x09, 0x02,        // Usage (Vendor Usage 2)
     0x15, 0x00,        // Logical Minimum (0)
     0x26, 0xFF, 0x00,  // Logical Maximum (255)
     0x75, 0x08,        // Report Size (8 bits)
-    0x95, 0x0F,        // Report Count (15 bytes)
+    0x95, 0x08,        // Report Count (8 bytes)
+    0xB1, 0x02,        // Feature (Data, Variable, Absolute)
+    
+    // Report ID 0x02: Fan RPM Reading (13 bytes)
+    0x85, HID_REPORT_ID_FAN_RPM,  // Report ID
+    0x09, 0x03,        // Usage (Vendor Usage 3)
+    0x15, 0x00,        // Logical Minimum (0)
+    0x27, 0xFF, 0xFF, 0x00, 0x00,  // Logical Maximum (65535)
+    0x75, 0x08,        // Report Size (8 bits)
+    0x95, 0x0D,        // Report Count (13 bytes)
+    0xB1, 0x02,        // Feature (Data, Variable, Absolute)
+    
+    // Report ID 0x03: RGB Control (64 bytes)
+    0x85, HID_REPORT_ID_RGB_CONTROL,  // Report ID
+    0x09, 0x04,        // Usage (Vendor Usage 4)
+    0x15, 0x00,        // Logical Minimum (0)
+    0x26, 0xFF, 0x00,  // Logical Maximum (255)
+    0x75, 0x08,        // Report Size (8 bits)
+    0x95, 0x40,        // Report Count (64 bytes)
+    0xB1, 0x02,        // Feature (Data, Variable, Absolute)
+    
+    // Report ID 0x04: Configuration (16 bytes)
+    0x85, HID_REPORT_ID_CONFIG,  // Report ID
+    0x09, 0x05,        // Usage (Vendor Usage 5)
+    0x15, 0x00,        // Logical Minimum (0)
+    0x26, 0xFF, 0x00,  // Logical Maximum (255)
+    0x75, 0x08,        // Report Size (8 bits)
+    0x95, 0x10,        // Report Count (16 bytes)
+    0xB1, 0x02,        // Feature (Data, Variable, Absolute)
+    
+    // Report ID 0x10: Status (16 bytes) - Input only
+    0x85, HID_REPORT_ID_STATUS,  // Report ID
+    0x09, 0x06,        // Usage (Vendor Usage 6)
+    0x15, 0x00,        // Logical Minimum (0)
+    0x26, 0xFF, 0x00,  // Logical Maximum (255)
+    0x75, 0x08,        // Report Size (8 bits)
+    0x95, 0x10,        // Report Count (16 bytes)
     0x81, 0x02,        // Input (Data, Variable, Absolute)
+    
     0xC0               // End Collection
 };
 

@@ -3,6 +3,7 @@
 #include "hardware/gpio.h"
 #include "hardware/irq.h"
 #include "hardware/timer.h"
+#include "hardware/sync.h"
 #include "pico/stdlib.h"
 #include <string.h>
 

@@ -39,6 +39,9 @@ extern "C" {
 // Enable Device stack
 #define CFG_TUD_ENABLED       1
 
+// RHPort Mode - Device mode
+#define CFG_TUSB_RHPORT0_MODE  (OPT_MODE_DEVICE)
+
 // Default is max speed that hardware controller could support with on-chip PHY
 #define CFG_TUD_MAX_SPEED     BOARD_TUD_MAX_SPEED
 
