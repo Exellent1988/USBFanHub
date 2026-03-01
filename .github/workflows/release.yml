@@ -127,13 +127,13 @@ jobs:
       uses: actions/checkout@v6
     
     - name: Download Firmware Artifacts
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: firmware-release
         path: release/firmware
     
     - name: Download Python Artifacts
-      uses: actions/download-artifact@v7
+      uses: actions/download-artifact@v8
       with:
         name: python-release
         path: release/python
