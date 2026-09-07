@@ -80,7 +80,7 @@ jobs:
         cp pico_fan_hub.bin pico_fan_hub_${VERSION}.bin
     
     - name: Upload Firmware Artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: firmware-release
         path: |
@@ -111,7 +111,7 @@ jobs:
         python -m build
     
     - name: Upload Python Artifacts
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
         name: python-release
         path: software/driver/dist/*
